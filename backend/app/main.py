@@ -1,16 +1,24 @@
 """Main FastAPI application."""
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.core.database import engine
 from app.models import Base
 from app.api.v1.api import api_router
+
+
+# Создать директорию для загрузок, если её нет
+UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR.mkdir(exist_ok=True)
+(UPLOAD_DIR / "images").mkdir(exist_ok=True)
 
 
 @asynccontextmanager
@@ -52,6 +60,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Монтируем статические файлы для изображений (до подключения роутеров)
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR.absolute())), name="uploads")
 
 # Подключение API роутеров
 app.include_router(api_router)

@@ -10,6 +10,7 @@ class BookBase(BaseModel):
     name: str
     genre: Optional[str] = None
     author: Optional[str] = None
+    image_url: Optional[str] = None
 
 
 class BookCreate(BookBase):

@@ -1,6 +1,6 @@
 """Book Service - бизнес-логика работы с книгами."""
 
-from typing import List
+from typing import List, Optional
 
 from app.models import BookModel
 from app.repositories import BookRepository
@@ -18,9 +18,12 @@ class BookService:
         """Получить все книги."""
         return await self.repository.get_all()
 
-    async def create_book(self, book_data: BookCreate) -> BookModel:
+    async def create_book(self, book_data: BookCreate, image_url: Optional[str] = None) -> BookModel:
         """Создать новую книгу."""
-        return await self.repository.create(book_data.model_dump())
+        data = book_data.model_dump()
+        if image_url:
+            data["image_url"] = image_url
+        return await self.repository.create(data)
 
     async def delete_book(self, book_id: int) -> None:
         """Удалить книгу по ID."""

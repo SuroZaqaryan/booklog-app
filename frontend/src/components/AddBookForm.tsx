@@ -26,10 +26,12 @@ export function AddBookForm({ genres, onSubmit, onCancel }: AddBookFormProps) {
     name: '',
     genre: null,
     author: null,
+    image: null,
   });
 
   const [customGenre, setCustomGenre] = useState('');
   const [isCustomGenre, setIsCustomGenre] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,9 +50,29 @@ export function AddBookForm({ genres, onSubmit, onCancel }: AddBookFormProps) {
     onSubmit(bookData);
     
     // Сброс формы
-    setFormData({ name: '', genre: null, author: null });
+    setFormData({ name: '', genre: null, author: null, image: null });
     setCustomGenre('');
     setIsCustomGenre(false);
+    setImagePreview(null);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData({ ...formData, image: file });
+      
+      // Создаем превью изображения
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setFormData({ ...formData, image: null });
+    setImagePreview(null);
   };
 
   return (
@@ -128,6 +150,41 @@ export function AddBookForm({ genres, onSubmit, onCancel }: AddBookFormProps) {
               }}
             >
               ← Выбрать из списка
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="image">Обложка книги</Label>
+        {!imagePreview ? (
+          <div className="space-y-2">
+            <Input
+              id="image"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+            <p className="text-sm text-gray-500">
+              Поддерживаются форматы: JPG, PNG, GIF, WEBP. Максимальный размер: 5MB
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <div className="relative inline-block">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="max-w-[200px] max-h-[300px] object-contain border-2 border-gray-300 rounded"
+              />
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleRemoveImage}
+            >
+              ✕ Удалить изображение
             </Button>
           </div>
         )}

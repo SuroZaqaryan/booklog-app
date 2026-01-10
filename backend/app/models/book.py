@@ -14,3 +14,4 @@ class BookModel(Base):
     name = Column(String, index=True, nullable=False)
     genre = Column(String, nullable=True)
     author = Column(String, nullable=True)
+    image_url = Column(String, nullable=True)

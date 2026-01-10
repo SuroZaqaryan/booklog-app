@@ -1,15 +1,16 @@
 """Books API endpoints."""
 
 import logging
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
 from app.repositories import BookRepository
 from app.schemas import BookCreate, BookPublic, BookStatusPublic
 from app.services import BookService
+from app.utils.image import save_image
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -63,19 +64,36 @@ async def get_books(service: BookService = Depends(get_book_service)):
 
 @router.post("", response_model=BookPublic, status_code=status.HTTP_201_CREATED)
 async def create_book(
-    book: BookCreate,
+    name: str = Form(...),
+    genre: Optional[str] = Form(None),
+    author: Optional[str] = Form(None),
+    image: Optional[UploadFile] = File(None),
     service: BookService = Depends(get_book_service)
 ):
     """
     Создать новую книгу.
     
     Args:
-        book: Данные для создания книги.
+        name: Название книги.
+        genre: Жанр книги (опционально).
+        author: Автор книги (опционально).
+        image: Файл изображения обложки (опционально).
         
     Returns:
         BookPublic: Созданная книга.
     """
-    return await service.create_book(book)
+    image_url = None
+    if image:
+        try:
+            image_url = await save_image(image)
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    
+    book_data = BookCreate(name=name, genre=genre, author=author, image_url=image_url)
+    return await service.create_book(book_data, image_url)
 
 
 @router.delete("/{book_id}", status_code=status.HTTP_204_NO_CONTENT)

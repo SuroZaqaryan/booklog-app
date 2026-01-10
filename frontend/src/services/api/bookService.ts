@@ -20,7 +20,26 @@ export const bookService = {
    * Создать новую книгу
    */
   async createBook(book: BookCreate): Promise<Book> {
-    const response = await apiClient.post<Book>(BOOKS_ENDPOINT, book);
+    const formData = new FormData();
+    formData.append('name', book.name);
+    
+    if (book.genre) {
+      formData.append('genre', book.genre);
+    }
+    
+    if (book.author) {
+      formData.append('author', book.author);
+    }
+    
+    if (book.image) {
+      formData.append('image', book.image);
+    }
+    
+    const response = await apiClient.post<Book>(BOOKS_ENDPOINT, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   },
 

@@ -19,6 +19,11 @@ export function BookCard({ book, onDelete }: BookCardProps) {
     }
   };
 
+  // Формируем полный URL для изображения
+  const imageUrl = book.image_url 
+    ? `http://localhost:8000/${book.image_url.replace(/\\/g, '/')}`
+    : null;
+
   return (
     <Card className="relative">
       <CardHeader>
@@ -27,6 +32,19 @@ export function BookCard({ book, onDelete }: BookCardProps) {
 
       </CardHeader>
       <CardContent>
+        {imageUrl && (
+          <div className="mb-4">
+            <img
+              src={imageUrl}
+              alt={`Обложка книги ${book.name}`}
+              className="w-full h-48 object-cover rounded-md"
+              onError={(e) => {
+                // Скрываем изображение при ошибке загрузки
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          </div>
+        )}
         {book.genre && (
           <p className="text-sm mb-4">
             <span className="font-semibold">Жанр:</span> {book.genre}
