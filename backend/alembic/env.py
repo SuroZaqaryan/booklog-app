@@ -16,12 +16,14 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from app.models import Base, BookModel, GenreModel  # noqa: F401 - импорт для autogenerate
+from src.core.base import Base
+from src.books.models import BookModel  # noqa: F401 - импорт для autogenerate
+from src.genres.models import GenreModel  # noqa: F401 - импорт для autogenerate
 
 target_metadata = Base.metadata
 
 # Получаем database_url из настроек приложения
-from app.core.config import settings
+from src.core.config import settings
 
 # Для Alembic используем синхронный драйвер SQLite
 # (Alembic работает синхронно, поэтому используем sqlite:// вместо sqlite+aiosqlite://)
