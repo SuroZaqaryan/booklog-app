@@ -1,12 +1,8 @@
-import { Button } from "@/components/retroui/Button";
+import { HomePage } from './pages/HomePage';
 import './App.css'
 
 function App() {
-  return (
-    <>
-       <Button>Click Me!</Button>
-    </>
-  )
+  return <HomePage />
 }
 
 export default App

@@ -1,75 +1,172 @@
-# React + TypeScript + Vite
+# 📚 BookLog Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Полноценный frontend для приложения управления личной библиотекой, выполненный в ретро-стиле с использованием React и RetroUI.
 
-Currently, two official plugins are available:
+![Tech Stack](https://img.shields.io/badge/React-19-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
+![Vite](https://img.shields.io/badge/Vite-7.2-purple)
+![Tailwind](https://img.shields.io/badge/Tailwind-4.1-cyan)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Возможности
 
-## React Compiler
+- 📖 **Просмотр библиотеки**: красивое отображение книг в виде карточек
+- ➕ **Добавление книг**: удобная форма с выбором жанра или вводом своего
+- 🗑️ **Удаление книг**: с подтверждением действия
+- 🎨 **Ретро-дизайн**: стильный интерфейс с использованием RetroUI
+- 📱 **Адаптивный**: корректная работа на всех устройствах
+- ⚡ **Быстрый**: оптимизированная производительность
+- 🔄 **Синхронизация**: работа с backend API в реальном времени
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## 🚀 Быстрый старт
 
-Note: This will impact Vite dev & build performances.
+### Предварительные требования
 
-## Expanding the ESLint configuration
+- Node.js 18+ 
+- npm или yarn
+- Backend API запущен на `http://localhost:8000`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Установка
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Клонируйте репозиторий (если еще не сделали)
+cd /home/suren/Документы/repos/python/booklog-app/frontend
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Установите зависимости
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Запуск
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Запуск dev сервера
+npm run dev
 ```
+
+Приложение будет доступно по адресу: **http://localhost:5173**
+
+### Другие команды
+
+```bash
+# Сборка для продакшена
+npm run build
+
+# Предпросмотр production сборки
+npm run preview
+
+# Проверка кода
+npm run lint
+```
+
+## 🏗️ Архитектура
+
+Проект построен по принципу чистой архитектуры с разделением на слои:
+
+```
+src/
+├── components/        # UI компоненты
+│   ├── retroui/      # RetroUI компоненты
+│   └── ...           # Переиспользуемые компоненты
+├── pages/            # Страницы приложения
+├── services/         # API интеграция
+│   └── api/          # HTTP клиент и сервисы
+├── hooks/            # React хуки
+├── types/            # TypeScript типы
+└── lib/              # Утилиты
+```
+
+📖 **Подробнее**: 
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - детальное описание архитектуры
+- [ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE_DIAGRAM.md) - визуальные схемы
+- [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) - итоговая сводка
+
+## 🎨 Технологии
+
+- **React 19** - UI библиотека с компилятором
+- **TypeScript 5.9** - статическая типизация
+- **Vite 7** - современный сборщик
+- **Tailwind CSS 4** - utility-first CSS фреймворк
+- **RetroUI** - компоненты в ретро-стиле
+- **Axios** - HTTP клиент для работы с API
+- **Lucide React** - современные иконки
+
+## 📡 API Integration
+
+Frontend работает с backend через REST API:
+
+- `GET /api/v1/book` - получение всех книг
+- `POST /api/v1/book` - создание книги
+- `DELETE /api/v1/book/{id}` - удаление книги
+- `GET /api/v1/book/genres` - получение жанров
+- `GET /api/v1/book/statuses` - получение статусов
+
+API клиент настраивается в `src/services/api/axios.ts`
+
+## 🧩 Компоненты
+
+### Основные
+
+- **HomePage** - главная страница с библиотекой
+- **BookList** - сетка карточек книг
+- **BookCard** - карточка отдельной книги
+- **AddBookDialog** - модальное окно добавления
+- **AddBookForm** - форма с валидацией
+
+### RetroUI
+
+Установлены через shadcn:
+- Button, Card, Input, Select, Dialog, Label, Text
+
+## 🪝 Hooks
+
+### `useBooks()`
+
+Главный хук для работы с книгами:
+
+```typescript
+const {
+  books,        // список книг
+  genres,       // доступные жанры
+  loading,      // состояние загрузки
+  error,        // ошибка загрузки
+  addBook,      // добавить книгу
+  deleteBook,   // удалить книгу
+  refetch,      // перезагрузить данные
+} = useBooks();
+```
+
+## 🎯 Особенности реализации
+
+- ✅ **Чистая архитектура** - разделение на слои
+- ✅ **Типобезопасность** - полная типизация
+- ✅ **Переиспользуемость** - независимые компоненты
+- ✅ **Масштабируемость** - легко расширять
+- ✅ **UX** - понятные сообщения и состояния
+- ✅ **Обработка ошибок** - централизованная
+- ✅ **Производительность** - оптимизированная
+
+## 📖 Документация
+
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - архитектура проекта
+- [ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE_DIAGRAM.md) - визуальные схемы
+- [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) - итоговая сводка
+- [../QUICKSTART.md](../QUICKSTART.md) - быстрый запуск всего приложения
+
+## 🔮 Возможные улучшения
+
+- [ ] Поиск и фильтрация книг
+- [ ] Редактирование информации о книге
+- [ ] Статусы чтения (прочитана, в процессе, в планах)
+- [ ] Сортировка по разным критериям
+- [ ] Пагинация для больших списков
+- [ ] Dark mode переключатель
+- [ ] Анимации и переходы
+- [ ] Offline режим
+
+## 📄 Лицензия
+
+Проект создан для образовательных целей.
+
+---
+
+**Разработано с ❤️ используя React и RetroUI**
+

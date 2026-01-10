@@ -1,7 +1,16 @@
 python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-python -m alembic revision --autogenerate -m "описание"  # Создать
-python -m alembic upgrade head                            # Применить
+# Alembic migartions
+
+# Создать
+python -m alembic revision --autogenerate -m "описание"
+
+# Применить
+python -m alembic upgrade head                            
+
+
+# Ubuntu
+cd /home/suren/Документы/repos/python/booklog-app/backend && uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 # 📚 BookLog Backend
 

@@ -73,3 +73,12 @@
   --destructive-foreground: #fff;
   --border: #3a3a3a;
 }
+
+/* Дополнительные стили для ретро-дизайна */
+body {
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-head);
+}
