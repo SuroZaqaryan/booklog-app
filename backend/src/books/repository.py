@@ -15,9 +15,9 @@ class BookRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def get_all(self) -> List[BookModel]:
+    async def get_all(self, stmt) -> List[BookModel]:
         """Получить все книги."""
-        result = await self.db.execute(select(BookModel))
+        result = await self.db.execute(stmt)
         return list(result.scalars().all())
 
     async def get_by_id(self, book_id: int) -> Optional[BookModel]:
@@ -39,8 +39,8 @@ class BookRepository:
         """Обновить книгу."""
         book = await self.get_by_id(book_id)
 
-        # if not book:
-        #     return None
+        if not book:
+            return None
 
         for field, value in book_updated_data.items():
             setattr(book, field, value)

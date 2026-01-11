@@ -11,8 +11,9 @@ export const bookService = {
   /**
    * Получить все книги
    */
-  async getAllBooks(): Promise<Book[]> {
-    const response = await apiClient.get<Book[]>(BOOKS_ENDPOINT);
+  async getAllBooks(searchQuery?: string): Promise<Book[]> {
+    const params = searchQuery ? { name: searchQuery } : {};
+    const response = await apiClient.get<Book[]>(BOOKS_ENDPOINT, { params });
     return response.data;
   },
 

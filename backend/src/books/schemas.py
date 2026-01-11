@@ -2,6 +2,7 @@
 
 from typing import Optional
 from pydantic import BaseModel, ConfigDict, Field
+import datetime
 
 from src.common.enums import BookStatus
 
@@ -14,6 +15,7 @@ class BookBase(BaseModel):
     author: Optional[str] = None
     status: Optional[BookStatus] = None
     image_url: Optional[str] = None
+    created_at: Optional[datetime.datetime] = None
 
 class BookUpdate(BaseModel):
     name: Optional[str] = Field(None, example="1984")

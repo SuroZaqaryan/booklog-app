@@ -2,6 +2,7 @@
 
 from typing import List, Optional
 
+from sqlalchemy import select
 from src.books.models import BookModel
 from src.books.repository import BookRepository
 from src.books.schemas import BookCreate, BookStatusPublic, BookUpdate
@@ -14,9 +15,14 @@ class BookService:
     def __init__(self, repository: BookRepository):
         self.repository = repository
 
-    async def get_all_books(self) -> List[BookModel]:
-        """Получить все книги."""
-        return await self.repository.get_all()
+    async def get_all_books(self, name: Optional[str] = None) -> List[BookModel]:
+        """Получить все книги с опциональным поиском по названию."""
+        stmt = select(BookModel)
+
+        if name:
+            stmt = stmt.where(BookModel.name.ilike(f"%{name}%"))
+
+        return await self.repository.get_all(stmt)
 
     async def create_book(self, book_data: BookCreate, image_url: Optional[str] = None) -> BookModel:
         """Создать новую книгу."""

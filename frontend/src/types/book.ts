@@ -13,6 +13,7 @@ export interface Book {
   image_url: string | null;
   pages: number | null;
   year: number | null;
+  created_at: string | null;
 }
 
 export interface BookCreate {

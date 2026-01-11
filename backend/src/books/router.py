@@ -3,7 +3,7 @@
 import logging
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi import APIRouter, Query, Depends, File, Form, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import get_db
@@ -32,6 +32,7 @@ async def get_book_statuses():
     """
     return BookService.get_book_statuses()
 
+
 @router.get("/genres", response_model=List[str])
 async def get_genres(service: BookService = Depends(get_book_service)):
     """
@@ -44,7 +45,10 @@ async def get_genres(service: BookService = Depends(get_book_service)):
 
 
 @router.get("", response_model=List[BookPublic])
-async def get_books(service: BookService = Depends(get_book_service)):
+async def get_books(
+        name: Optional[str] = Query(None, min_length=1),
+        service: BookService = Depends(get_book_service)
+):
     """
     Получить список всех книг.
     
@@ -52,13 +56,14 @@ async def get_books(service: BookService = Depends(get_book_service)):
         List[BookPublic]: Список книг.
     """
     try:
-        return await service.get_all_books()
+        return await service.get_all_books(name)
     except Exception as e:
         logger.error(f"Error in get_books: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error"
         )
+
 
 @router.put("/{book_id}", response_model=BookPublic)
 async def update_book(
@@ -74,14 +79,15 @@ async def update_book(
             detail=str(e)
         )
 
+
 @router.post("", response_model=BookPublic, status_code=status.HTTP_201_CREATED)
 async def create_book(
-    name: str = Form(...),
-    genre: Optional[str] = Form(None),
-    author: Optional[str] = Form(None),
-    book_status: Optional[str] = Form(None),
-    image: Optional[UploadFile] = File(None),
-    service: BookService = Depends(get_book_service)
+        name: str = Form(...),
+        genre: Optional[str] = Form(None),
+        author: Optional[str] = Form(None),
+        book_status: Optional[str] = Form(None),
+        image: Optional[UploadFile] = File(None),
+        service: BookService = Depends(get_book_service)
 ):
     """
     Создать новую книгу.
@@ -105,15 +111,15 @@ async def create_book(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=str(e)
             )
-    
+
     book_data = BookCreate(name=name, genre=genre, author=author, status=book_status, image_url=image_url)
     return await service.create_book(book_data, image_url)
 
 
 @router.delete("/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_book(
-    book_id: int,
-    service: BookService = Depends(get_book_service)
+        book_id: int,
+        service: BookService = Depends(get_book_service)
 ):
     """
     Удалить книгу по ID.

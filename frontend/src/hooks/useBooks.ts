@@ -11,13 +11,14 @@ export function useBooks() {
   const [genres, setGenres] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Загрузка книг
-  const fetchBooks = async () => {
+  // Загрузка книг с поддержкой поиска
+  const fetchBooks = async (query?: string) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await bookService.getAllBooks();
+      const data = await bookService.getAllBooks(query);
       setBooks(data);
     } catch (err) {
       console.error('Error fetching books:', err);
@@ -87,11 +88,22 @@ export function useBooks() {
     fetchGenres();
   }, []);
 
+  // Поиск с debounce
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      fetchBooks(searchQuery || undefined);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
+
   return {
     books,
     genres,
     loading,
     error,
+    searchQuery,
+    setSearchQuery,
     addBook,
     deleteBook,
     updateBook,

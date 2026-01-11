@@ -11,10 +11,13 @@ import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { useBooks } from '@/hooks/useBooks';
 import { Text } from '@/components/retroui/Text';
+import { Input } from '@/components/retroui/Input';
+import { Search, X } from 'lucide-react';
+import { Button } from '@/components/retroui/Button';
 import type { Book } from '@/types/book';
 
 export function HomePage() {
-  const { books, genres, loading, error, addBook, deleteBook, updateBook, refetch } = useBooks();
+  const { books, genres, loading, error, searchQuery, setSearchQuery, addBook, deleteBook, updateBook, refetch } = useBooks();
   const [actionError, setActionError] = useState<string | null>(null);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
 
@@ -62,16 +65,41 @@ export function HomePage() {
         )}
 
         {/* Панель управления */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h2 className="text-2xl font-bold mb-1">Моя библиотека</h2>
-            <Text className="text-muted-foreground">
-              {books.length > 0 
-                ? `Всего книг: ${books.length}`
-                : 'Библиотека пуста'}
-            </Text>
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-1">Моя библиотека</h2>
+              <Text className="text-muted-foreground">
+                {books.length > 0 
+                  ? `${searchQuery ? 'Найдено' : 'Всего'} книг: ${books.length}`
+                  : searchQuery ? 'Ничего не найдено' : 'Библиотека пуста'}
+              </Text>
+            </div>
+            <AddBookDialog genres={genres} onAddBook={handleAddBook} />
           </div>
-          <AddBookDialog genres={genres} onAddBook={handleAddBook} />
+
+          {/* Поисковая строка */}
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Поиск книг по названию..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 pr-10 font-mono"
+            />
+            {searchQuery && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7 w-7 p-0"
+                title="Очистить поиск"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Содержимое */}

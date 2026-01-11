@@ -71,6 +71,17 @@ export function BookCard({ book, onDelete, onEdit }: BookCardProps) {
 
   const statusConfig = book.status ? STATUS_CONFIG[book.status] : null;
 
+  // Форматирование даты добавления
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return '—';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
   return (
     <div className="group relative font-mono">
       {/* Основная карточка в стиле библиотечной карточки */}
@@ -193,11 +204,7 @@ export function BookCard({ book, onDelete, onEdit }: BookCardProps) {
 
           {/* Дата добавления */}
           <div className="text-xs text-gray-500 italic mt-auto pt-3 border-t border-gray-300">
-            Запись от {new Date().toLocaleDateString('ru-RU', {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric'
-            })}
+            Дата добавления: {formatDate(book.created_at)}
           </div>
 
             {/* Кнопки действий - появляются только при наведении */}
