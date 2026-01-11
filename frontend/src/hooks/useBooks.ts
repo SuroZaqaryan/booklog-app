@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { bookService } from '@/services/api';
-import type { Book, BookCreate } from '@/types/book';
+import type { Book, BookCreate, BookUpdate } from '@/types/book';
 
 export function useBooks() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -65,6 +65,22 @@ export function useBooks() {
     }
   };
 
+  // Обновление книги
+  const updateBook = async (bookId: number, bookData: BookUpdate) => {
+    try {
+      const updatedBook = await bookService.updateBook(bookId, bookData);
+      setBooks((prev) => prev.map((book) => (book.id === bookId ? updatedBook : book)));
+      
+      // Обновляем список жанров, если добавлен новый
+      if (bookData.genre && !genres.includes(bookData.genre)) {
+        setGenres((prev) => [...prev, bookData.genre!]);
+      }
+    } catch (err) {
+      console.error('Error updating book:', err);
+      throw new Error('Не удалось обновить книгу. Попробуйте еще раз.');
+    }
+  };
+
   // Загрузка данных при монтировании
   useEffect(() => {
     fetchBooks();
@@ -78,6 +94,7 @@ export function useBooks() {
     error,
     addBook,
     deleteBook,
+    updateBook,
     refetch: fetchBooks,
   };
 }

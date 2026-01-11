@@ -35,6 +35,21 @@ class BookRepository:
         await self.db.refresh(book)
         return book
 
+    async def update(self, book_updated_data: dict, book_id: int) -> Optional[BookModel]:
+        """Обновить книгу."""
+        book = await self.get_by_id(book_id)
+
+        # if not book:
+        #     return None
+
+        for field, value in book_updated_data.items():
+            setattr(book, field, value)
+
+        await self.db.commit()
+        await self.db.refresh(book)
+
+        return book
+
     async def delete(self, book: BookModel) -> None:
         """Удалить книгу."""
         await self.db.delete(book)

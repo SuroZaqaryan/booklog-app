@@ -8,7 +8,11 @@
       <change beforePath="$PROJECT_DIR$/.idea/booklog-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/booklog-app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/services/api/axios.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/api/axios.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/books.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/books.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/books/repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/books/repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/books/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/books/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/books/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/books/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/books/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/books/service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,7 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="12176" />
+    <option name="cachedIndexableFilesCount" value="2524" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -42,9 +46,20 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "ai.playground.ignore.import.keys.banner.in.settings": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Repos/python-courses/booklog-app",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/home/suren/Документы/repos/python/booklog-app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecapSpentCounter">
@@ -57,6 +72,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.29346.142" />
         <option value="bundled-python-sdk-f2b7a9f6281b-6e1f45a539f7-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.29346.142" />
       </set>
     </attachedChunks>
@@ -68,7 +84,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1768025894532</updated>
+      <workItem from="1768111721754" duration="2540000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

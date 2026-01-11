@@ -26,3 +26,11 @@ export interface BookStatus {
   value: BookStatusValue;
 }
 
+export interface BookUpdate {
+  name?: string;
+  genre?: string | null;
+  author?: string | null;
+  status?: BookStatusValue | null;
+  image?: File | null;
+}
+

@@ -8,9 +8,10 @@ import type { Book } from '@/types/book';
 interface BookListProps {
   books: Book[];
   onDeleteBook: (bookId: number) => void;
+  onEditBook?: (book: Book) => void;
 }
 
-export function BookList({ books, onDeleteBook }: BookListProps) {
+export function BookList({ books, onDeleteBook, onEditBook }: BookListProps) {
   if (books.length === 0) {
     return (
       <div className="text-center py-12">
@@ -27,7 +28,12 @@ export function BookList({ books, onDeleteBook }: BookListProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {books.map((book) => (
-        <BookCard key={book.id} book={book} onDelete={onDeleteBook} />
+        <BookCard 
+          key={book.id} 
+          book={book} 
+          onDelete={onDeleteBook} 
+          onEdit={onEditBook}
+        />
       ))}
     </div>
   );

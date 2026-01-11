@@ -6,14 +6,17 @@ import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { BookList } from '@/components/BookList';
 import { AddBookDialog } from '@/components/AddBookDialog';
+import { EditBookDialog } from '@/components/EditBookDialog';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { useBooks } from '@/hooks/useBooks';
 import { Text } from '@/components/retroui/Text';
+import type { Book } from '@/types/book';
 
 export function HomePage() {
-  const { books, genres, loading, error, addBook, deleteBook, refetch } = useBooks();
+  const { books, genres, loading, error, addBook, deleteBook, updateBook, refetch } = useBooks();
   const [actionError, setActionError] = useState<string | null>(null);
+  const [editingBook, setEditingBook] = useState<Book | null>(null);
 
   const handleAddBook = async (bookData: any) => {
     try {
@@ -30,6 +33,19 @@ export function HomePage() {
       await deleteBook(bookId);
     } catch (err) {
       setActionError(err instanceof Error ? err.message : 'Произошла ошибка при удалении');
+    }
+  };
+
+  const handleEditBook = (book: Book) => {
+    setEditingBook(book);
+  };
+
+  const handleUpdateBook = async (bookId: number, bookData: any) => {
+    try {
+      setActionError(null);
+      await updateBook(bookId, bookData);
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Произошла ошибка при обновлении');
     }
   };
 
@@ -64,9 +80,24 @@ export function HomePage() {
         ) : error ? (
           <ErrorMessage message={error} onRetry={refetch} />
         ) : (
-          <BookList books={books} onDeleteBook={handleDeleteBook} />
+          <BookList 
+            books={books} 
+            onDeleteBook={handleDeleteBook}
+            onEditBook={handleEditBook}
+          />
         )}
       </main>
+
+      {/* Диалог редактирования */}
+      {editingBook && (
+        <EditBookDialog
+          book={editingBook}
+          genres={genres}
+          open={!!editingBook}
+          onOpenChange={(open) => !open && setEditingBook(null)}
+          onUpdateBook={handleUpdateBook}
+        />
+      )}
     </div>
   );
 }

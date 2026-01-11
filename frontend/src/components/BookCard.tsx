@@ -5,11 +5,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/retroui/Card';
 import { Button } from '@/components/retroui/Button';
 import type { Book, BookStatusValue } from '@/types/book';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Pencil } from 'lucide-react';
 
 interface BookCardProps {
   book: Book;
   onDelete: (bookId: number) => void;
+  onEdit?: (book: Book) => void;
 }
 
 // Маппинг статусов на русские названия
@@ -28,10 +29,16 @@ const STATUS_COLORS: Record<BookStatusValue, string> = {
   dropped: 'bg-gray-100 text-gray-800 border-gray-200',
 };
 
-export function BookCard({ book, onDelete }: BookCardProps) {
+export function BookCard({ book, onDelete, onEdit }: BookCardProps) {
   const handleDelete = () => {
     if (window.confirm(`Вы уверены, что хотите удалить книгу "${book.name}"?`)) {
       onDelete(book.id);
+    }
+  };
+
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit(book);
     }
   };
 
@@ -74,8 +81,18 @@ export function BookCard({ book, onDelete }: BookCardProps) {
             <span className="font-semibold">Жанр:</span> {book.genre}
           </p>
         )}
-        <div className="flex justify-end">
-   
+        <div className="flex justify-end gap-2">
+          {onEdit && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleEdit}
+              className="gap-2"
+            >
+              <Pencil className="h-4 w-4" />
+              Редактировать
+            </Button>
+          )}
           <Button
             variant="outline"
             size="sm"

@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import get_db
 from src.books.repository import BookRepository
-from src.books.schemas import BookCreate, BookPublic, BookStatusPublic
+from src.books.schemas import BookCreate, BookPublic, BookStatusPublic, BookUpdate
 from src.books.service import BookService
 from src.common.utils.image import save_image
 
@@ -31,7 +31,6 @@ async def get_book_statuses():
         List[BookStatusPublic]: Список статусов с их метками.
     """
     return BookService.get_book_statuses()
-
 
 @router.get("/genres", response_model=List[str])
 async def get_genres(service: BookService = Depends(get_book_service)):
@@ -61,6 +60,19 @@ async def get_books(service: BookService = Depends(get_book_service)):
             detail="Internal server error"
         )
 
+@router.put("/{book_id}", response_model=BookPublic)
+async def update_book(
+        book_update: BookUpdate,
+        book_id: int,
+        service: BookService = Depends(get_book_service)
+):
+    try:
+        return await service.update_book(book_update, book_id)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e)
+        )
 
 @router.post("", response_model=BookPublic, status_code=status.HTTP_201_CREATED)
 async def create_book(

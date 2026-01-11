@@ -3,7 +3,7 @@
  */
 
 import { apiClient } from './axios';
-import type { Book, BookCreate, BookStatus } from '@/types/book';
+import type { Book, BookCreate, BookStatus, BookUpdate } from '@/types/book';
 
 const BOOKS_ENDPOINT = '/book';
 
@@ -67,6 +67,29 @@ export const bookService = {
    */
   async getStatuses(): Promise<BookStatus[]> {
     const response = await apiClient.get<BookStatus[]>(`${BOOKS_ENDPOINT}/statuses`);
+    return response.data;
+  },
+
+  /**
+   * Обновить книгу
+   */
+  async updateBook(bookId: number, book: BookUpdate): Promise<Book> {
+    const updateData: Record<string, any> = {};
+    
+    if (book.name !== undefined) {
+      updateData.name = book.name;
+    }
+    if (book.genre !== undefined) {
+      updateData.genre = book.genre;
+    }
+    if (book.author !== undefined) {
+      updateData.author = book.author;
+    }
+    if (book.status !== undefined) {
+      updateData.status = book.status;
+    }
+    
+    const response = await apiClient.put<Book>(`${BOOKS_ENDPOINT}/${bookId}`, updateData);
     return response.data;
   },
 };

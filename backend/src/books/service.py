@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from src.books.models import BookModel
 from src.books.repository import BookRepository
-from src.books.schemas import BookCreate, BookStatusPublic
+from src.books.schemas import BookCreate, BookStatusPublic, BookUpdate
 from src.common.enums import BookStatus
 
 
@@ -24,6 +24,17 @@ class BookService:
         if image_url:
             data["image_url"] = image_url
         return await self.repository.create(data)
+
+    async def update_book(self, book_updated_data: BookUpdate, book_id: int) -> Optional[BookModel]:
+        """Обновляет книгу."""
+        data = book_updated_data.model_dump(exclude_unset=True)
+        book = await self.repository.update(data, book_id)
+
+        if not book:
+            raise ValueError(f"Book with id {book_id} not found")
+
+        return book
+
 
     async def delete_book(self, book_id: int) -> None:
         """Удалить книгу по ID."""
