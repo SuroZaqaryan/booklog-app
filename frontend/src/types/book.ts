@@ -11,6 +11,8 @@ export interface Book {
   author: string | null;
   status: BookStatusValue | null;
   image_url: string | null;
+  pages: number | null;
+  year: number | null;
 }
 
 export interface BookCreate {
@@ -19,6 +21,8 @@ export interface BookCreate {
   author?: string | null;
   status?: BookStatusValue | null;
   image?: File | null;
+  pages?: number | null;
+  year?: number | null;
 }
 
 export interface BookStatus {
@@ -32,5 +36,7 @@ export interface BookUpdate {
   author?: string | null;
   status?: BookStatusValue | null;
   image?: File | null;
+  pages?: number | null;
+  year?: number | null;
 }
 

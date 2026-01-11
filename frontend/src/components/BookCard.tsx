@@ -1,11 +1,12 @@
 /**
- * Компонент для отображения карточки книги
+ * Переработанный компонент карточки книги в стиле библиотечной картотеки
+ * С компактным Avatar для обложки
  */
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/retroui/Card';
-import { Button } from '@/components/retroui/Button';
 import type { Book, BookStatusValue } from '@/types/book';
-import { Trash2, Pencil } from 'lucide-react';
+import { Trash2, Pencil, BookOpen, CheckCircle, Bookmark, XCircle } from 'lucide-react';
+import { Avatar } from '@/components/retroui/Avatar';
+import { Button } from '@/components/retroui/Button';
 
 interface BookCardProps {
   book: Book;
@@ -13,25 +14,47 @@ interface BookCardProps {
   onEdit?: (book: Book) => void;
 }
 
-// Маппинг статусов на русские названия
-const STATUS_LABELS: Record<BookStatusValue, string> = {
-  want_to_read: 'Хочу прочитать',
-  reading: 'Читаю',
-  finished: 'Прочитал',
-  dropped: 'Бросил',
-};
-
-// Цвета для статусов
-const STATUS_COLORS: Record<BookStatusValue, string> = {
-  want_to_read: 'bg-blue-100 text-blue-800 border-blue-200',
-  reading: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  finished: 'bg-green-100 text-green-800 border-green-200',
-  dropped: 'bg-gray-100 text-gray-800 border-gray-200',
+// Маппинг статусов на русские названия и иконки
+const STATUS_CONFIG: Record<BookStatusValue, {
+  label: string;
+  color: string;
+  bg: string;
+  border: string;
+  icon: React.ReactNode;
+}> = {
+  want_to_read: {
+    label: 'Хочу',
+    color: 'text-amber-800',
+    bg: 'bg-amber-50',
+    border: 'border-amber-300',
+    icon: <Bookmark className="h-3 w-3" />
+  },
+  reading: {
+    label: 'Читаю',
+    color: 'text-blue-800',
+    bg: 'bg-blue-50',
+    border: 'border-blue-300',
+    icon: <BookOpen className="h-3 w-3" />
+  },
+  finished: {
+    label: 'Прочитал',
+    color: 'text-green-800',
+    bg: 'bg-green-50',
+    border: 'border-green-300',
+    icon: <CheckCircle className="h-3 w-3" />
+  },
+  dropped: {
+    label: 'Бросил',
+    color: 'text-gray-700',
+    bg: 'bg-gray-100',
+    border: 'border-gray-300',
+    icon: <XCircle className="h-3 w-3" />
+  },
 };
 
 export function BookCard({ book, onDelete, onEdit }: BookCardProps) {
   const handleDelete = () => {
-    if (window.confirm(`Вы уверены, что хотите удалить книгу "${book.name}"?`)) {
+    if (window.confirm(`Удалить "${book.name}" из каталога?`)) {
       onDelete(book.id);
     }
   };
@@ -42,69 +65,188 @@ export function BookCard({ book, onDelete, onEdit }: BookCardProps) {
     }
   };
 
-  // Формируем полный URL для изображения
   const imageUrl = book.image_url 
     ? `http://localhost:8000/${book.image_url.replace(/\\/g, '/')}`
     : null;
 
+  const statusConfig = book.status ? STATUS_CONFIG[book.status] : null;
+
   return (
-    <Card className="relative">
-      <CardHeader>
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex-1">
-            <CardTitle>{book.name}</CardTitle>
-            <CardDescription>Автор: {book.author ? book.author : ''}</CardDescription>
+    <div className="group relative font-mono">
+      {/* Основная карточка в стиле библиотечной карточки */}
+      <div className="
+        bg-amber-50 
+        border-2 border-gray-800 
+        shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]
+        hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.8)]
+        transition-all duration-200
+        p-5
+        relative
+        overflow-hidden
+        h-full
+        flex flex-col
+      ">
+        {/* Верхний угол как у библиотечной карточки */}
+        <div className="absolute top-0 right-0 w-0 h-0 border-l-[20px] border-l-transparent border-t-[20px] border-t-gray-800" />
+        
+        {/* Угловые отметки */}
+        <div className="absolute top-2 left-2 w-1.5 h-1.5 border border-gray-600 rounded-sm" />
+        <div className="absolute bottom-2 right-2 w-1.5 h-1.5 border border-gray-600 rounded-sm" />
+
+        {/* Поля для подшивки */}
+        <div className="absolute left-3 top-4 bottom-4 w-3 border-r border-dashed border-gray-300" />
+        <div className="absolute right-3 top-4 bottom-4 w-3 border-l border-dashed border-gray-300" />
+
+        {/* Аватар-миниатюра обложки (как экслибрис) */}
+        <div className="absolute top-4 left-4 z-20">
+        <Avatar>
+            <Avatar.Image src={imageUrl || ''} alt={`Обложка: ${book.name}`} />
+            <Avatar.Fallback>AH</Avatar.Fallback>
+          </Avatar>
+          
+          {/* Инвентарный номер под аватаром */}
+          <div className="text-[10px] text-gray-600 text-center mt-1 font-bold tracking-wider">
+            #{book.id.toString().padStart(4, '0')}
           </div>
-          {book.status && (
-            <span className={`px-2 py-1 text-xs font-medium rounded-md border whitespace-nowrap ${STATUS_COLORS[book.status]}`}>
-              {STATUS_LABELS[book.status]}
-            </span>
-          )}
         </div>
-      </CardHeader>
-      <CardContent>
-        {imageUrl && (
-          <div className="mb-4">
-            <img
-              src={imageUrl}
-              alt={`Обложка книги ${book.name}`}
-              className="w-full h-48 object-cover rounded-md"
-              onError={(e) => {
-                // Скрываем изображение при ошибке загрузки
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          </div>
-        )}
-        {book.genre && (
-          <p className="text-sm mb-2">
-            <span className="font-semibold">Жанр:</span> {book.genre}
-          </p>
-        )}
-        <div className="flex justify-end gap-2">
-          {onEdit && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleEdit}
-              className="gap-2"
-            >
-              <Pencil className="h-4 w-4" />
-              Редактировать
-            </Button>
+
+        {/* Контент карточки (с отступом под аватар) */}
+        <div className="flex-1 pl-20 pr-4 relative z-10">
+          {/* Штамп статуса */}
+          {statusConfig && (
+            <div className={`
+              absolute top-0 right-0 
+              ${statusConfig.bg} ${statusConfig.border} ${statusConfig.color}
+              border-2 
+              px-2 py-1 
+              transform -translate-y-1/3
+              flex items-center gap-1.5
+              text-xs font-bold tracking-wider
+              uppercase
+              -rotate-3
+            `}>
+              {statusConfig.icon}
+              <span>{statusConfig.label}</span>
+            </div>
           )}
+
+          {/* Название книги */}
+          <h3 className="
+            text-lg 
+            font-bold 
+            text-gray-900 
+            mb-2
+            leading-tight
+            font-serif
+            line-clamp-2
+            min-h-[2.5rem]
+          ">
+            {book.name}
+          </h3>
+
+          {/* Автор */}
+          <div className="mb-3">
+            <div className="text-xs text-gray-500 uppercase tracking-wider mb-0.5">
+              Автор
+            </div>
+            <div className="text-base text-gray-800 font-medium line-clamp-1">
+              {book.author || 'Не указан'}
+            </div>
+          </div>
+
+          {/* Жанр */}
+          {book.genre && (
+            <div className="mb-4">
+              <div className="text-xs text-gray-500 uppercase tracking-wider mb-0.5">
+                Категория
+              </div>
+              <div className="
+                inline-block 
+                px-2 py-1 
+                bg-gray-800 
+                text-amber-50 
+                text-xs 
+                font-bold 
+                tracking-wider
+                border border-gray-900
+                max-w-full
+                truncate
+              ">
+                {book.genre}
+              </div>
+            </div>
+          )}
+
+          {/* Дополнительная информация (можно добавить позже) */}
+          <div className="mt-4 pt-3 border-t border-gray-300">
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div>
+                <div className="text-gray-500 mb-0.5">Страниц</div>
+                <div className="font-medium">{book.pages || '—'}</div>
+              </div>
+              <div>
+                <div className="text-gray-500 mb-0.5">Год</div>
+                <div className="font-medium">{book.year || '—'}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Дата добавления */}
+          <div className="text-xs text-gray-500 italic mt-auto pt-3 border-t border-gray-300">
+            Запись от {new Date().toLocaleDateString('ru-RU', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric'
+            })}
+          </div>
+
+            {/* Кнопки действий - появляются только при наведении */}
+      <div className="
+        flex gap-3 justify-end
+        mt-8
+        opacity-0 group-hover:opacity-100
+        transition-opacity duration-200
+        z-20
+      ">
+        {onEdit && (
           <Button
-            variant="outline"
-            size="sm"
-            onClick={handleDelete}
-            className="gap-2"
+            onClick={handleEdit}
+            variant="default"
+            className="
+              text-[10px]
+              tracking-wider
+              uppercase
+              gap-1
+            "
+            title="Редактировать запись"
           >
-            <Trash2 className="h-4 w-4" />
-            Удалить
+            <Pencil className="h-3 w-3" />
+            <span>Редактировать</span>
           </Button>
+        )}
+        
+        <Button
+          onClick={handleDelete}
+          variant="outline"
+          className="
+            text-[10px]
+            tracking-wider
+            uppercase
+            gap-1
+            hover:bg-red-50
+            hover:text-red-700
+            hover:border-red-700
+          "
+          title="Удалить из каталога"
+        >
+          <Trash2 className="h-3 w-3" />
+          <span>Удалить</span>
+        </Button>
+      </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+
+    
+    </div>
   );
 }
-
