@@ -3,6 +3,8 @@
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
+from src.common.enums import BookStatus
+
 
 class BookBase(BaseModel):
     """Базовая схема книги."""
@@ -10,6 +12,7 @@ class BookBase(BaseModel):
     name: str
     genre: Optional[str] = None
     author: Optional[str] = None
+    status: Optional[BookStatus] = None
     image_url: Optional[str] = None
 
 

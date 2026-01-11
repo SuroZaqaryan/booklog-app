@@ -67,6 +67,7 @@ async def create_book(
     name: str = Form(...),
     genre: Optional[str] = Form(None),
     author: Optional[str] = Form(None),
+    book_status: Optional[str] = Form(None),
     image: Optional[UploadFile] = File(None),
     service: BookService = Depends(get_book_service)
 ):
@@ -77,6 +78,7 @@ async def create_book(
         name: Название книги.
         genre: Жанр книги (опционально).
         author: Автор книги (опционально).
+        book_status: Статус книги (опционально, один из: want_to_read, reading, finished, dropped).
         image: Файл изображения обложки (опционально).
         
     Returns:
@@ -92,7 +94,7 @@ async def create_book(
                 detail=str(e)
             )
     
-    book_data = BookCreate(name=name, genre=genre, author=author, image_url=image_url)
+    book_data = BookCreate(name=name, genre=genre, author=author, status=book_status, image_url=image_url)
     return await service.create_book(book_data, image_url)
 
 

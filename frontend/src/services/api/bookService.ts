@@ -31,6 +31,10 @@ export const bookService = {
       formData.append('author', book.author);
     }
     
+    if (book.status) {
+      formData.append('book_status', book.status);
+    }
+    
     if (book.image) {
       formData.append('image', book.image);
     }

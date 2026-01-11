@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2bf0f141-c7ce-4489-9f13-455f1eeeb3dc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/backend/books.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/books.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/booklog-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/booklog-app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/services/api/axios.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/api/axios.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +16,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="10993" />
+    <option name="cachedIndexableFilesCount" value="12176" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -41,15 +43,16 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Repos/python-courses/booklog-app"
+    "last_opened_file_path": "C:/Repos/python-courses/booklog-app",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1769832126902" />
-    <option name="spentUsd" value="0.01093225" />
+    <option name="spentUsd" value="0.01504975" />
   </component>
   <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="8" />
+    <option name="suspendCountdown" value="7" />
   </component>
   <component name="SharedIndexes">
     <attachedChunks>

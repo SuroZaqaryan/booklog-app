@@ -13,7 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/retroui/Select';
-import type { BookCreate } from '@/types/book';
+import type { BookCreate, BookStatus, BookStatusValue } from '@/types/book';
+import { bookService } from '@/services/api/bookService';
 
 interface AddBookFormProps {
   genres: string[];
@@ -26,12 +27,27 @@ export function AddBookForm({ genres, onSubmit, onCancel }: AddBookFormProps) {
     name: '',
     genre: null,
     author: null,
+    status: null,
     image: null,
   });
 
   const [customGenre, setCustomGenre] = useState('');
   const [isCustomGenre, setIsCustomGenre] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [statuses, setStatuses] = useState<BookStatus[]>([]);
+
+  // Загрузка списка статусов
+  useEffect(() => {
+    const loadStatuses = async () => {
+      try {
+        const statusList = await bookService.getStatuses();
+        setStatuses(statusList);
+      } catch (error) {
+        console.error('Ошибка загрузки статусов:', error);
+      }
+    };
+    loadStatuses();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +66,7 @@ export function AddBookForm({ genres, onSubmit, onCancel }: AddBookFormProps) {
     onSubmit(bookData);
     
     // Сброс формы
-    setFormData({ name: '', genre: null, author: null, image: null });
+    setFormData({ name: '', genre: null, author: null, status: null, image: null });
     setCustomGenre('');
     setIsCustomGenre(false);
     setImagePreview(null);
@@ -153,6 +169,25 @@ export function AddBookForm({ genres, onSubmit, onCancel }: AddBookFormProps) {
             </Button>
           </div>
         )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="status">Статус</Label>
+        <Select
+          value={formData.status || ''}
+          onValueChange={(value) => setFormData({ ...formData, status: value as BookStatusValue })}
+        >
+          <SelectTrigger id="status" className="w-full h-[44px]">
+            <SelectValue placeholder="Выберите статус" />
+          </SelectTrigger>
+          <SelectContent>
+            {statuses.map((status) => (
+              <SelectItem key={status.value} value={status.value}>
+                {status.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">
