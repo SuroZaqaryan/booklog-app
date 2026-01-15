@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.database import get_db
 from src.books.repository import BookRepository
 from src.books.schemas import BookCreate, BookPublic, BookStatusPublic, BookUpdate
+from src.user.schemas import UserCreate
 from src.books.service import BookService
 from src.common.utils.image import save_image
 
@@ -20,6 +21,20 @@ def get_book_service(db: AsyncSession = Depends(get_db)) -> BookService:
     """Dependency для получения BookService."""
     repository = BookRepository(db)
     return BookService(repository)
+
+
+@router.post("/register")
+async def register(
+        user: UserCreate,
+        service: BookService = Depends(get_book_service)
+):
+    try:
+        return await service.user_register(user)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
 
 
 @router.get("/statuses", response_model=List[BookStatusPublic])

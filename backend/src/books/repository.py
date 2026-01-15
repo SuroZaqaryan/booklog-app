@@ -7,13 +7,27 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.books.models import BookModel
 from src.genres.models import GenreModel
-
+from src.user.models import UserModel
 
 class BookRepository:
     """Репозиторий для работы с книгами в БД."""
 
     def __init__(self, db: AsyncSession):
         self.db = db
+
+    async def register(self, user) -> UserModel:
+        """Регистрация."""
+
+        new_user = UserModel(
+            email=user.email,
+            password=user.password
+        )
+
+        self.db.add(new_user)
+        await self.db.commit()
+
+        return {"message": "User Registered"}
+
 
     async def get_all(self, stmt) -> List[BookModel]:
         """Получить все книги."""

@@ -4,9 +4,12 @@ from typing import List, Optional
 
 from sqlalchemy import select
 from src.books.models import BookModel
+from src.user.models import UserModel
 from src.books.repository import BookRepository
 from src.books.schemas import BookCreate, BookStatusPublic, BookUpdate
+from src.user.schemas import UserCreate
 from src.common.enums import BookStatus
+from fastapi import Depends
 
 
 class BookService:
@@ -14,6 +17,25 @@ class BookService:
 
     def __init__(self, repository: BookRepository):
         self.repository = repository
+
+    async def user_register(self, user: UserCreate):
+        """Регистрация."""
+
+        existing_user = self.get_user_by_email(user)
+
+        if existing_user:
+            raise ValueError(f"Пользователь с email {user.email} уже зарегистрирован")
+
+        return await self.repository.register(user)
+
+    async def get_user_by_email(self, email: str):
+        """Поиск пользователя по email."""
+
+        result = self.db.execute(
+            select(UserModel).where(UserModel.email == email)
+        )
+
+        return result.scalar_one_or_none()
 
     async def get_all_books(self, name: Optional[str] = None) -> List[BookModel]:
         """Получить все книги с опциональным поиском по названию."""

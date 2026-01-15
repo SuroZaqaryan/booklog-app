@@ -66,7 +66,7 @@ export function HomePage() {
 
         {/* Панель управления */}
         <div className="mb-8">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex justify-between items-center flex-wrap gap-3 mb-6">
             <div>
               <h2 className="text-2xl font-bold mb-1">Моя библиотека</h2>
               <Text className="text-muted-foreground">
@@ -86,7 +86,7 @@ export function HomePage() {
               placeholder="Поиск книг по названию..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-10 font-mono"
+              className="pl-10 pr-10 font-mono bg-white"
             />
             {searchQuery && (
               <Button
